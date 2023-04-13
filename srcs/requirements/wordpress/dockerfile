@@ -1,0 +1,29 @@
+FROM debian:buster
+
+RUN apt-get update && apt-get install -y php php-fpm php-mysql wget curl sudo
+
+RUN mkdir /var/run/php
+
+RUN mkdir -p /var/www/wordpress
+
+COPY www.conf /etc/php/7.3/fpm/pool.d/
+
+RUN wget -O /tmp/wordpress.tar.gz https://wordpress.org/latest.tar.gz && \
+    tar -xzf /tmp/wordpress.tar.gz -C /var/www && \
+    rm /tmp/wordpress.tar.gz && \
+    chown -R www-data:www-data /var/www/wordpress && \
+    chmod -R 755 /var/www/wordpress
+
+COPY wp-config.php /var/www/wordpress/
+
+RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+RUN chmod +x wp-cli.phar
+RUN mv wp-cli.phar /usr/local/bin/wp
+
+
+COPY wordpress.sh /bin
+RUN  chmod +x /bin/wordpress.sh
+
+EXPOSE 9000
+
+ENTRYPOINT ["bin/bash", "/bin/wordpress.sh"]

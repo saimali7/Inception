@@ -1,0 +1,49 @@
+version: "3.8"
+services:
+  nginx:
+    build: requirements/nginx/
+    ports: 
+     - "443:443"      
+    networks:
+      - my-network
+    volumes:
+      - wp-data:/var/www/
+    depends_on:
+      - wordpress
+      - mariadb
+
+  wordpress:
+    build: requirements/wordpress/
+    networks:
+      - my-network
+    volumes:
+      - wp-data:/var/www/
+    depends_on:
+      - mariadb
+
+  mariadb:
+    build: requirements/mariadb/
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - my-network
+
+volumes:
+  wp-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/saim/Desktop/test/wp
+
+  db-data:
+    driver: local
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/saim/Desktop/test/db
+
+networks:
+  my-network:
+    driver: bridge
+    name: network
