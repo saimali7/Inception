@@ -2,8 +2,8 @@ version: "3.8"
 services:
   nginx:
     build: requirements/nginx/
-    ports: 
-     - "443:443"      
+    ports:
+     - "443:443"
     networks:
       - my-network
     volumes:
@@ -26,7 +26,7 @@ services:
       - .env
 
   mariadb:
-    build: 
+    build:
       context: requirements/mariadb/
       args:
         DB_NAME: ${DB_NAME}
@@ -46,14 +46,14 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /Users/saim/Desktop/test/wp
+      device: /home/$USER/data/wp
 
   db-data:
     driver: local
     driver_opts:
       o: bind
       type: none
-      device: /Users/saim/Desktop/test/db
+      device: /home/$USER/data/db
 
 networks:
   my-network:
