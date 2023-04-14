@@ -11,6 +11,7 @@ services:
     depends_on:
       - wordpress
       - mariadb
+    restart: on-failure
 
   wordpress:
     build: requirements/wordpress/
@@ -20,6 +21,7 @@ services:
       - wp-data:/var/www/
     depends_on:
       - mariadb
+    restart: on-failure
 
   mariadb:
     build: requirements/mariadb/
@@ -27,6 +29,7 @@ services:
       - db-data:/var/lib/mysql
     networks:
       - my-network
+    restart: on-failure
 
 volumes:
   wp-data:
